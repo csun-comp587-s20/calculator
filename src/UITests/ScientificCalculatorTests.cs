@@ -1,18 +1,19 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Remote;
-using CalculatorTestSuite.TestFramework;
+using UITests.TestFramework;
 using System.Threading;
 
-namespace CalculatorTestSuite
+namespace UITests
 {
     [TestFixture]
     public class ScientificCalculatorTests
     {
         private WindowsDriver<WindowsElement> _driver;
         private StandardCalculatorPage _StandardCalculatorPage;
+        private CalculatorResults _calculatorResults;
         private static WindowsElement header;
         private static WindowsElement calculatorResult;
 
@@ -26,6 +27,7 @@ namespace CalculatorTestSuite
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
             _StandardCalculatorPage = new StandardCalculatorPage(_driver);
+            _calculatorResults = new CalculatorResults(_driver);
 
             // Identify calculator mode by locating the header
             try
@@ -67,32 +69,28 @@ namespace CalculatorTestSuite
         public void Addition()
         {
             _StandardCalculatorPage.Addition(5, 7);
-            _StandardCalculatorPage.EqualsBtn.Click();
-            Assert.AreEqual("12", _StandardCalculatorPage.ReturnCalculatorResults());
+            Assert.AreEqual("12", _calculatorResults.ReturnCalculatorResults());
         }
 
         [Test]
         public void Division()
         {
             _StandardCalculatorPage.Division(8, 1);
-            _StandardCalculatorPage.EqualsBtn.Click();
-            Assert.AreEqual("8", _StandardCalculatorPage.ReturnCalculatorResults());
+            Assert.AreEqual("8", _calculatorResults.ReturnCalculatorResults());
         }
 
         [Test]
         public void Multiplication()
         {
             _StandardCalculatorPage.Multiplication(9, 9);
-            _StandardCalculatorPage.EqualsBtn.Click();
-            Assert.AreEqual("81", _StandardCalculatorPage.ReturnCalculatorResults());
+            Assert.AreEqual("81", _calculatorResults.ReturnCalculatorResults());
         }
 
         [Test]
         public void Subtraction()
         {
             _StandardCalculatorPage.Subtraction(9, 1);
-            _StandardCalculatorPage.EqualsBtn.Click();
-            Assert.AreEqual("8", _StandardCalculatorPage.ReturnCalculatorResults());
+            Assert.AreEqual("8", _calculatorResults.ReturnCalculatorResults());
         }
     }
 }
