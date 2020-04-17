@@ -1,7 +1,7 @@
-﻿using OpenQA.Selenium.Appium.Windows;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 
-namespace CalculatorTestSuite.TestFramework
+namespace UITests.TestFramework
 {
     public class StandardCalculatorPage
     {
@@ -36,29 +36,49 @@ namespace CalculatorTestSuite.TestFramework
             PressNumber(value2);
         }
 
-        private void PressNumber(int value)
+        public void EvaluateStringInput(string exp)
         {
-            bool negativeFlag = false;
-            if (value < 0)
+            exp = exp.Trim();
+            foreach (char c in exp)
             {
-                negativeFlag = true;
-                value = System.Math.Abs(value);
+                PressKey(c);
             }
-            switch (value)
+        }
+
+        public void PressNumber(int value)
+        {
+            if(value < 0)
             {
-                case 0: ZeroBtn.Click(); break;
-                case 1: OneBtn.Click(); break;
-                case 2: TwoBtn.Click(); break;
-                case 3: ThreeBtn.Click(); break;
-                case 4: FourBtn.Click(); break;
-                case 5: FiveBtn.Click(); break;
-                case 6: SixBtn.Click(); break;
-                case 7: SevenBtn.Click(); break;
-                case 8: EightBtn.Click(); break;
-                case 9: NineBtn.Click(); break;
-                default: throw new NotSupportedException($"Value: {value} not supported ");
+                EvaluateStringInput(Math.Abs(value).ToString());
+                NegativeBtn.Click();
+            } else
+            {
+                EvaluateStringInput(Math.Abs(value).ToString());
             }
-            if (negativeFlag) NegativeBtn.Click();
+        }
+
+        private void PressKey(char c)
+        {
+            switch (c)
+            {
+                case '0': ZeroBtn.Click(); break;
+                case '1': OneBtn.Click(); break;
+                case '2': TwoBtn.Click(); break;
+                case '3': ThreeBtn.Click(); break;
+                case '4': FourBtn.Click(); break;
+                case '5': FiveBtn.Click(); break;
+                case '6': SixBtn.Click(); break;
+                case '7': SevenBtn.Click(); break;
+                case '8': EightBtn.Click(); break;
+                case '9': NineBtn.Click(); break;
+                case '.': DecimalBtn.Click(); break;
+                case '+': AdditionBtn.Click(); break;
+                case '-': SubtractBtn.Click(); break;
+                case '/': DivideBtn.Click(); break;
+                case '*': MultiplyBtn.Click(); break;
+                case '%': PercentBtn.Click(); break;
+                default: throw new NotSupportedException($"Charactor: {c} not supported");
+            }
         }
 
         #region Header
@@ -82,7 +102,6 @@ namespace CalculatorTestSuite.TestFramework
         public WindowsElement SubtractBtn => _session.FindElementByName("Minus");
         public WindowsElement MultiplyBtn => _session.FindElementByName("Multiply by");
         public WindowsElement DivideBtn => _session.FindElementByName("Divide by");
-        public WindowsElement EqualsBtn => _session.FindElementByName("Equals");
         public WindowsElement NegativeBtn => _session.FindElementByName("Positive Negative");
         public WindowsElement BackspaceBtn => _session.FindElementByName("Backspace");
         public WindowsElement ClearBtn => _session.FindElementByName("Clear");
@@ -102,7 +121,5 @@ namespace CalculatorTestSuite.TestFramework
         #region Calculator Results
         public WindowsElement ResultsOutput => _session.FindElementByAccessibilityId("CalculatorResults");
         #endregion
-
-        public string ReturnCalculatorResults() => ResultsOutput.Text.Replace("Display is", string.Empty).Trim();
     }
 }
