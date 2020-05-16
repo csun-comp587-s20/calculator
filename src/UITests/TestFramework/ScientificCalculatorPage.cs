@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using NUnit.Framework;
 using OpenQA.Selenium.Appium.Windows;
 
 namespace UITests.TestFramework
@@ -10,6 +12,13 @@ namespace UITests.TestFramework
         public ScientificCalculatorPage(WindowsDriver<WindowsElement> session)
         {
             this._session = session;
+        }
+
+        public void ScientificNotation(string num, int exponent)
+        {
+            EvaluateStringInput(num);
+            ExponentialBtn.Click();
+            PressNumber(exponent);
         }
 
         public void AreaOfCircle(int r)
@@ -28,6 +37,14 @@ namespace UITests.TestFramework
             {
                 return ans;
             }
+        }
+
+        public void LogyX(int y, int x)
+        {
+            SecondBtn.Click();
+            PressNumber(y);
+            LogBaseXBtn.Click();
+            PressNumber(x);
         }
 
         public void LogBase10(int x)
@@ -51,10 +68,35 @@ namespace UITests.TestFramework
 
         public void EvaluateStringInput(string exp)
         {
-            exp = exp.Trim();
-            foreach (char c in exp)
+            if(exp[0] == '-')
             {
-                PressKey(c);
+                exp = exp.Substring(1);
+                foreach (char c in exp)
+                {
+                    PressKey(c);
+                }
+                NegativeBtn.Click();
+            }
+            else
+            {
+                exp = exp.Trim();
+                foreach (char c in exp)
+                {
+                    PressKey(c);
+                }
+            }
+        }
+
+        public void PressNumber(double value)
+        {
+            if(value < 0)
+            {
+                EvaluateStringInput(Math.Abs(value).ToString());
+                NegativeBtn.Click();
+            }
+            else
+            {
+                EvaluateStringInput(value.ToString());
             }
         }
 
@@ -62,7 +104,7 @@ namespace UITests.TestFramework
         {
             if (value < 0)
             {
-                EvaluateStringInput(Math.Abs(value).ToString());
+                EvaluateStringInput(value.ToString().Substring(1));
                 NegativeBtn.Click();
             }
             else
@@ -70,8 +112,9 @@ namespace UITests.TestFramework
                 EvaluateStringInput(Math.Abs(value).ToString());
             }
         }
-        public  void PressKey(char c)
+        public void PressKey(char c)
         {
+            _session.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
             switch (c)
             {
                 case '0': ZeroBtn.Click(); break;
@@ -154,16 +197,28 @@ namespace UITests.TestFramework
         public WindowsElement HyperbolicFunctionBtn => _session.FindElementByName("Hyperbolic function");
         public WindowsElement SineBtn => _session.FindElementByName("Sine");
         public WindowsElement CosineBtn => _session.FindElementByName("Cosine");
-        public WindowsElement TagentBtn => _session.FindElementByName("Tagent");
+        public WindowsElement TagentBtn => _session.FindElementByName("Tangent");
         public WindowsElement SecantBtn => _session.FindElementByName("Secant");
         public WindowsElement CosecantBtn => _session.FindElementByName("Cosecant");
-        public WindowsElement Cotangent => _session.FindElementByName("Cotanget");
+        public WindowsElement CotangentBtn => _session.FindElementByName("Cotangent");
+        public WindowsElement ArcSineBtn => _session.FindElementByName("Arc sine");
+        public WindowsElement ArcCosineBtn => _session.FindElementByName("Arc cosine");
+        public WindowsElement ArcTangentBtn => _session.FindElementByName("Arc tangent");
+        public WindowsElement ArcSecantBtn => _session.FindElementByName("Arc Secant");
+        public WindowsElement ArcCosecantBtn => _session.FindElementByName("Arc Cosecant");
+        public WindowsElement ArcCoTangentBtn => _session.FindElementByName("Arc Cotangent");
         public WindowsElement HypSineBtn => _session.FindElementByName("Hyperbolic Sine");
         public WindowsElement HypCosineBtn => _session.FindElementByName("Hyperbolic Cosine");
-        public WindowsElement HypTagentBtn => _session.FindElementByName("Hyperbolic Tagent");
+        public WindowsElement HypTagentBtn => _session.FindElementByName("Hyperbolic Tangent");
         public WindowsElement HypSecantBtn => _session.FindElementByName("Hyperbolic Secant");
         public WindowsElement HypCosecantBtn => _session.FindElementByName("Hyperbolic Cosecant");
-        public WindowsElement HypCotangent => _session.FindElementByName("Hyperbolic Cotanget");
+        public WindowsElement HypCotangentBtn => _session.FindElementByName("Hyperbolic Cotangent");
+        public WindowsElement ArcHypSineBtn => _session.FindElementByName("Hyperbolic arc sine");
+        public WindowsElement ArcHypCosineBtn => _session.FindElementByName("Hyperbolic arc cosine");
+        public WindowsElement ArcHypTagentBtn => _session.FindElementByName("Hyperbolic arc tangent");
+        public WindowsElement ArcHypSecantBtn => _session.FindElementByName("Hyperbolic Arc Secant");
+        public WindowsElement ArcHypCosecantBtn => _session.FindElementByName("Hyperbolic Arc Cosecant");
+        public WindowsElement ArcHypCotangentBtn => _session.FindElementByName("Hyperbolic Arc Cotangent");
         #endregion
 
         #region Function
