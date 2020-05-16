@@ -77,7 +77,7 @@ namespace UITests.TestFramework
                 case '/': DivideBtn.Click(); break;
                 case '*': MultiplyBtn.Click(); break;
                 case '%': PercentBtn.Click(); break;
-                default: throw new NotSupportedException($"Charactor: {c} not supported");
+                default: Console.WriteLine($"Charactor: {c} not supported"); break;
             }
         }
 

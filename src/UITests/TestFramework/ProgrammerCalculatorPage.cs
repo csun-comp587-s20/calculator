@@ -1,4 +1,5 @@
 using OpenQA.Selenium.Appium.Windows;
+using org.mariuszgromada.math.mxparser.mathcollection;
 using System;
 
 namespace UITests.TestFramework
@@ -11,7 +12,160 @@ namespace UITests.TestFramework
         {
             this._session = session;
         }
+        public void BitShift(int arg1, string op, bool carry)
+        {
+            PressNumber(arg1);
+            if (carry)
+            {
+                switch (op)
+                {
+                    case "Lsh":
+                        Lsh_RoLC.Click();
+                        break;
+                    case "Rsh":
+                        Rsh_RoRC.Click();
+                        break;
+                    default:
+                        break;
+                }
+            } else
+            {
+                switch (op)
+                {
+                    case "Lsh":
+                        Lsh_RoL.Click();
+                        break;
+                    case "Rsh":
+                        Rsh_RoR.Click();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        public void BitShift(int arg1, string op, int arg2, bool isLogicalShift)
+        {
+            PressNumber(arg1);
+            if (isLogicalShift)
+            {
+                switch (op)
+                {
+                    case "Lsh":
+                        Lsh_Btn.Click();
+                        break;
+                    case "Rsh":
+                        Rsh_Btn.Click();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (op)
+                {
+                    case "Lsh":
+                        Lsh_Btn2.Click();
+                        break;
+                    case "Rsh":
+                        Rsh_Btn2.Click();
+                        break;
+                    default:
+                        break;
+                }
+            }
 
+            PressNumber(arg2);
+        }
+        public void Not(int arg1)
+        {
+            PressNumber(arg1);
+            BitwiseBtn.Click();
+            Not_Btn.Click();
+
+        }
+        public void Bitwise(int arg1, string op, int arg2)
+        {
+            PressNumber(arg1);
+            BitwiseBtn.Click();
+            switch (op)
+            {
+                case "AND":
+                    And_Btn.Click();
+                    break;
+                case "OR":
+                    Or_Btn.Click();
+                    break;
+                case "NAND":
+                    Nand_Btn.Click();
+                    break;
+                case "XOR":
+                    Xor_Btn.Click();
+                    break;
+                case "NOR":
+                    Nor_Btn.Click();
+                    break;
+                default:
+                    break;
+            }
+            PressNumber(arg2);
+        }
+        public void EvaluateStringInput(string exp)
+        {
+            if (exp[0] == '-')
+            {
+                exp = exp.Substring(1);
+                foreach (char c in exp)
+                {
+                    PressKey(c);
+                }
+                NegativeBtn.Click();
+            }
+            else
+            {
+                exp = exp.Trim();
+                foreach (char c in exp)
+                {
+                    PressKey(c);
+                }
+            }
+        }
+        public void PressNumber(int value)
+        {
+            if (value < 0)
+            {
+                EvaluateStringInput(Math.Abs(value).ToString());
+                NegativeBtn.Click();
+            }
+            else
+            {
+                EvaluateStringInput(Math.Abs(value).ToString());
+            }
+        }
+        public void PressKey(char c)
+        {
+            switch (c)
+            {
+                case '0': ZeroBtn.Click(); break;
+                case '1': OneBtn.Click(); break;
+                case '2': TwoBtn.Click(); break;
+                case '3': ThreeBtn.Click(); break;
+                case '4': FourBtn.Click(); break;
+                case '5': FiveBtn.Click(); break;
+                case '6': SixBtn.Click(); break;
+                case '7': SevenBtn.Click(); break;
+                case '8': EightBtn.Click(); break;
+                case '9': NineBtn.Click(); break;
+                case '+': AdditionBtn.Click(); break;
+                case '-': SubtractBtn.Click(); break;
+                case '/': DivideBtn.Click(); break;
+                case '*': MultiplyBtn.Click(); break;
+                case '%': PercentBtn.Click(); break;
+                case '(': LeftParenthesisBtn.Click(); break;
+                case ')': RightParenthesisBtn.Click(); break;
+                default: throw new NotSupportedException($"Charactor: {c} not supported");
+            }
+        }
         #region NumPad
         public WindowsElement ZeroBtn => _session.FindElementByName("Zero");
         public WindowsElement OneBtn => _session.FindElementByName("One");
@@ -37,8 +191,14 @@ namespace UITests.TestFramework
         public WindowsElement ClearBtn => _session.FindElementByName("Clear");
         public WindowsElement ClearEntryBtn => _session.FindElementByName("Clear entry");
         public WindowsElement BackspaceBtn => _session.FindElementByName("Backspace");
-        public WindowsElement LeftShitBtn => _session.FindElementByName("Left shift");
-        public WindowsElement RightShiftBtn => _session.FindElementByName("Right shift");
+        public WindowsElement Lsh_Btn => _session.FindElementByName("Left Shift");
+        public WindowsElement Rsh_Btn => _session.FindElementByName("Right Shift");
+        public WindowsElement Lsh_Btn2 => _session.FindElementByName("Left shift");
+        public WindowsElement Rsh_Btn2 => _session.FindElementByName("Right shift");
+        public WindowsElement Lsh_RoL => _session.FindElementByName("Rotate on left");
+        public WindowsElement Rsh_RoR => _session.FindElementByName("Rotate on right");
+        public WindowsElement Lsh_RoLC => _session.FindElementByName("Rotate on left with carry");
+        public WindowsElement Rsh_RoRC => _session.FindElementByName("Rotate on right with carry");
         #endregion
 
         #region Base

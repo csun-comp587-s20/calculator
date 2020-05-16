@@ -41,7 +41,7 @@ namespace UITests
             // Ensure that calculator is in standard mode
             if (!header.Text.Equals("Standard", StringComparison.OrdinalIgnoreCase))
             {
-                _driver.FindElementByAccessibilityId("TogglePaneButton").Click();
+                _driver.FindElementByName("Open Navigation").Click();
                 Thread.Sleep(TimeSpan.FromSeconds(1));
                 var menu = _driver.FindElementByClassName("SplitViewPane");
                 menu.FindElementByName("Standard Calculator").Click();
